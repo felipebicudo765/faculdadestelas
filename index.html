@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Protótipo Barbearia - SPA</title>
+  <style>
+    :root{
+      --bg:#F5F5F5; --primary:#1E90FF; --accent:#FFA500; --text:#333; --muted:#777; --card:#FFFFFF; --sidebar:#222;
+      --radius:12px; --glass: rgba(255,255,255,0.6);
+    }
+    *{box-sizing:border-box;font-family:Inter, Roboto, Arial, sans-serif}
+    body{margin:0;background:var(--bg);color:var(--text)}
+    .app{display:flex;min-height:100vh}
+    /* sidebar */
+    .sidebar{width:220px;background:var(--sidebar);color:#fff;padding:28px 18px;display:flex;flex-direction:column;gap:18px}
+    .logo{display:flex;align-items:center;gap:10px}
+    .logo .mark{width:44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--sidebar);font-weight:700}
+    .nav{margin-top:8px;display:flex;flex-direction:column;gap:8px}
+    .nav button{background:transparent;border:none;color:#ddd;text-align:left;padding:10px;border-radius:8px;cursor:pointer}
+    .nav button.active{background:rgba(255,255,255,0.06);color:#fff}
+    /* main */
+    .main{flex:1;padding:28px}
+    header{display:flex;justify-content:space-between;align-items:center}
+    .cards{display:flex;gap:18px;margin-top:18px}
+    .card{flex:1;min-height:90px;border-radius:12px;background:var(--card);padding:18px;box-shadow:0 2px 8px rgba(0,0,0,0.04);display:flex;flex-direction:column;justify-content:center}
+    .blue{background:linear-gradient(135deg,var(--primary),#4ea8ff);color:#fff}
+    .orange{background:linear-gradient(135deg,var(--accent),#ffb347);color:#fff}
+    .controls{margin-top:18px;border-radius:12px;padding:18px;background:var(--card)}
+    .btn{display:inline-block;padding:10px 18px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-weight:600;cursor:pointer}
+    .btn.ghost{background:transparent;color:var(--text);border:1px solid #e6e6e6}
+    /* screens */
+    .screen{display:none;margin-top:18px}
+    .screen.active{display:block}
+    /* forms / tables */
+    form{display:flex;flex-direction:column;gap:12px}
+    input,select,textarea{padding:12px;border-radius:8px;border:1px solid #e6e6e6}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:10px;border-bottom:1px solid #f0f0f0;text-align:left}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .search{padding:8px 12px;border-radius:8px;border:1px solid #ddd}
+    /* responsiveness */
+    @media(max-width:900px){.sidebar{display:none}.main{padding:18px}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="mark">B</div>
+        <div>
+          <div style="font-weight:700">BARBEARIA</div>
+          <div style="font-size:12px;color:#cfcfcf">Sistema de Agendamento</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <button class="active" data-view="dashboard">Dashboard</button>
+        <button data-view="agendamentos">Agendamentos</button>
+        <button data-view="novo">Novo Agendamento</button>
+        <button data-view="clientes">Clientes</button>
+        <button data-view="servicos">Serviços</button>
+        <button data-view="relatorios">Relatórios</button>
+        <button data-view="sobre">Sobre</button>
+      </nav>
+      <div style="margin-top:auto;font-size:12px;color:#bbb">v1.0 • Desenvolvedor</div>
+    </aside>
+
+    <main class="main">
+      <header>
+        <h1 id="pageTitle">Dashboard</h1>
+        <div style="display:flex;gap:12px;align-items:center">
+          <div style="text-align:right">
+            <div style="font-weight:700">João Silva</div>
+            <div style="font-size:12px;color:var(--muted)">Barbeiro • admin</div>
+          </div>
+        </div>
+      </header>
+
+      <section class="cards">
+        <div class="card blue"><div style="font-size:28px;font-weight:700">10</div><div>Agendamentos de hoje</div></div>
+        <div class="card"><div style="font-size:28px;font-weight:700">25</div><div>Clientes cadastrados</div></div>
+        <div class="card orange"><div style="font-size:28px;font-weight:700">4</div><div>Próximos horários</div></div>
+      </section>
+
+      <div class="controls">
+        <button class="btn" id="btnNovo">Novo Agendamento</button>
+        <button class="btn ghost" id="btnVerAgenda">Ver Agenda Completa</button>
+
+        <!-- screens -->
+        <div id="dashboard" class="screen active">
+          <h2>Resumo do dia</h2>
+          <p>Use os botões ao lado para criar um agendamento ou navegar.</p>
+        </div>
+
+        <div id="agendamentos" class="screen">
+          <div class="toolbar">
+            <div><input class="search" placeholder="Buscar cliente ou serviço"/></div>
+            <div><button class="btn" onclick="showView('novo')">Novo</button></div>
+          </div>
+          <table>
+            <thead><tr><th>Cliente</th><th>Serviço</th><th>Data/Hora</th><th>Status</th><th>Ações</th></tr></thead>
+            <tbody>
+              <tr><td>Marcos</td><td>Corte</td><td>10/11/2025 10:00</td><td>Confirmado</td><td><button class="btn ghost">Editar</button></td></tr>
+              <tr><td>Lucas</td><td>Barba</td><td>10/11/2025 11:00</td><td>Pendente</td><td><button class="btn ghost">Editar</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="novo" class="screen">
+          <h2>Novo Agendamento</h2>
+          <form id="formAgendamento" onsubmit="event.preventDefault(); saveAgendamento();">
+            <select id="clienteSelect"><option>Marcos</option><option>Lucas</option><option>João</option></select>
+            <select id="servicoSelect"><option>Corte - 30min</option><option>Barba - 20min</option><option>Corte + Barba - 50min</option></select>
+            <input type="datetime-local" id="datetime" />
+            <textarea id="obs" placeholder="Observações (opcional)" rows="3"></textarea>
+            <div style="display:flex;gap:8px"><button class="btn" type="submit">Salvar Agendamento</button><button class="btn ghost" type="button" onclick="showView('agendamentos')">Cancelar</button></div>
+          </form>
+        </div>
+
+        <div id="clientes" class="screen">
+          <div class="toolbar"><div><input class="search" placeholder="Buscar cliente"/></div><div><button class="btn" onclick="addCliente()">Adicionar Cliente</button></div></div>
+          <table>
+            <thead><tr><th>Nome</th><th>Telefone</th><th>Último Serviço</th><th>Ações</th></tr></thead>
+            <tbody>
+              <tr><td>Marcos</td><td>(44) 9 9999-9999</td><td>10/10/2025 - Corte</td><td><button class="btn ghost">Editar</button></td></tr>
+              <tr><td>Lucas</td><td>(44) 9 8888-8888</td><td>09/11/2025 - Barba</td><td><button class="btn ghost">Editar</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="servicos" class="screen">
+          <div class="toolbar"><div>Lista de serviços</div><div><button class="btn" onclick="addServico()">Novo Serviço</button></div></div>
+          <table>
+            <thead><tr><th>Serviço</th><th>Valor</th><th>Duração</th><th>Ações</th></tr></thead>
+            <tbody>
+              <tr><td>Corte</td><td>R$ 30,00</td><td>30 min</td><td><button class="btn ghost">Editar</button></td></tr>
+              <tr><td>Barba</td><td>R$ 20,00</td><td>20 min</td><td><button class="btn ghost">Editar</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="relatorios" class="screen">
+          <h2>Relatórios</h2>
+          <p>Selecione o período e gere relatórios em PDF (botão simulado).</p>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:12px">
+            <input type="date"/><input type="date"/>
+            <button class="btn" onclick="alert('Gerando PDF (simulado)')">Gerar PDF</button>
+          </div>
+        </div>
+
+        <div id="sobre" class="screen">
+          <h2>Sobre o Sistema</h2>
+          <p>Protótipo criado para atividade acadêmica. Desenvolvedor: João Silva.</p>
+          <p>Versão 1.0 • Contato: joao@example.com</p>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // Navegação simples entre telas
+    const navButtons = document.querySelectorAll('.nav button')
+    const screens = document.querySelectorAll('.screen')
+    const pageTitle = document.getElementById('pageTitle')
+
+    function showView(id){
+      screens.forEach(s=>s.classList.remove('active'))
+      document.getElementById(id).classList.add('active')
+      // update nav active
+      navButtons.forEach(b=>b.classList.toggle('active', b.dataset.view===id))
+      // update title
+      pageTitle.textContent = ({dashboard:'Dashboard',agendamentos:'Agendamentos',novo:'Novo Agendamento',clientes:'Clientes',servicos:'Serviços',relatorios:'Relatórios',sobre:'Sobre'})[id] || 'Protótipo'
+    }
+    navButtons.forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)))
+    document.getElementById('btnNovo').addEventListener('click',()=>showView('novo'))
+    document.getElementById('btnVerAgenda').addEventListener('click',()=>showView('agendamentos'))
+
+    function saveAgendamento(){
+      alert('Agendamento salvo (simulado). Tire o print agora.');
+      showView('agendamentos')
+    }
+    function addCliente(){alert('Adicionar cliente (simulado)')}
+    function addServico(){alert('Novo serviço (simulado)')}
+  </script>
+</body>
+</html>
