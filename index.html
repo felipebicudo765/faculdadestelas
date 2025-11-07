@@ -12,14 +12,12 @@
     *{box-sizing:border-box;font-family:Inter, Roboto, Arial, sans-serif}
     body{margin:0;background:var(--bg);color:var(--text)}
     .app{display:flex;min-height:100vh}
-    /* sidebar */
     .sidebar{width:220px;background:var(--sidebar);color:#fff;padding:28px 18px;display:flex;flex-direction:column;gap:18px}
     .logo{display:flex;align-items:center;gap:10px}
     .logo .mark{width:44px;height:44px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--sidebar);font-weight:700}
     .nav{margin-top:8px;display:flex;flex-direction:column;gap:8px}
     .nav button{background:transparent;border:none;color:#ddd;text-align:left;padding:10px;border-radius:8px;cursor:pointer}
     .nav button.active{background:rgba(255,255,255,0.06);color:#fff}
-    /* main */
     .main{flex:1;padding:28px}
     header{display:flex;justify-content:space-between;align-items:center}
     .cards{display:flex;gap:18px;margin-top:18px}
@@ -29,17 +27,14 @@
     .controls{margin-top:18px;border-radius:12px;padding:18px;background:var(--card)}
     .btn{display:inline-block;padding:10px 18px;border-radius:10px;border:none;background:var(--primary);color:#fff;font-weight:600;cursor:pointer}
     .btn.ghost{background:transparent;color:var(--text);border:1px solid #e6e6e6}
-    /* screens */
     .screen{display:none;margin-top:18px}
     .screen.active{display:block}
-    /* forms / tables */
     form{display:flex;flex-direction:column;gap:12px}
     input,select,textarea{padding:12px;border-radius:8px;border:1px solid #e6e6e6}
     table{width:100%;border-collapse:collapse}
     th,td{padding:10px;border-bottom:1px solid #f0f0f0;text-align:left}
     .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
     .search{padding:8px 12px;border-radius:8px;border:1px solid #ddd}
-    /* responsiveness */
     @media(max-width:900px){.sidebar{display:none}.main{padding:18px}}
   </style>
 </head>
@@ -60,9 +55,10 @@
         <button data-view="clientes">Clientes</button>
         <button data-view="servicos">Serviços</button>
         <button data-view="relatorios">Relatórios</button>
+        <button data-view="financeiro">Relatório Financeiro</button>
         <button data-view="sobre">Sobre</button>
       </nav>
-      <div style="margin-top:auto;font-size:12px;color:#bbb">v1.0 • Desenvolvedor</div>
+      <div style="margin-top:auto;font-size:12px;color:#bbb">v1.1 • Desenvolvedor</div>
     </aside>
 
     <main class="main">
@@ -86,7 +82,6 @@
         <button class="btn" id="btnNovo">Novo Agendamento</button>
         <button class="btn ghost" id="btnVerAgenda">Ver Agenda Completa</button>
 
-        <!-- screens -->
         <div id="dashboard" class="screen active">
           <h2>Resumo do dia</h2>
           <p>Use os botões ao lado para criar um agendamento ou navegar.</p>
@@ -108,11 +103,11 @@
 
         <div id="novo" class="screen">
           <h2>Novo Agendamento</h2>
-          <form id="formAgendamento" onsubmit="event.preventDefault(); saveAgendamento();">
-            <select id="clienteSelect"><option>Marcos</option><option>Lucas</option><option>João</option></select>
-            <select id="servicoSelect"><option>Corte - 30min</option><option>Barba - 20min</option><option>Corte + Barba - 50min</option></select>
-            <input type="datetime-local" id="datetime" />
-            <textarea id="obs" placeholder="Observações (opcional)" rows="3"></textarea>
+          <form onsubmit="event.preventDefault(); saveAgendamento();">
+            <select><option>Marcos</option><option>Lucas</option><option>João</option></select>
+            <select><option>Corte - 30min</option><option>Barba - 20min</option><option>Corte + Barba - 50min</option></select>
+            <input type="datetime-local" />
+            <textarea placeholder="Observações (opcional)" rows="3"></textarea>
             <div style="display:flex;gap:8px"><button class="btn" type="submit">Salvar Agendamento</button><button class="btn ghost" type="button" onclick="showView('agendamentos')">Cancelar</button></div>
           </form>
         </div>
@@ -148,43 +143,71 @@
           </div>
         </div>
 
+        <!-- NOVA TELA RELATÓRIO FINANCEIRO -->
+        <div id="financeiro" class="screen">
+          <h2>Relatório Financeiro</h2>
+          <p>Resumo financeiro dos atendimentos no período selecionado.</p>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:12px">
+            <input type="date"/><input type="date"/>
+            <button class="btn">Filtrar</button>
+          </div>
+          <div style="margin-top:18px;background:#fff;padding:18px;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,0.05)">
+            <h3>Resumo</h3>
+            <ul>
+              <li>Total de Atendimentos: <strong>14</strong></li>
+              <li>Receita Total: <strong>R$ 560,00</strong></li>
+              <li>Ticket Médio: <strong>R$ 40,00</strong></li>
+            </ul>
+            <h3>Detalhamento</h3>
+            <table>
+              <thead><tr><th>Data</th><th>Cliente</th><th>Serviço</th><th>Valor</th></tr></thead>
+              <tbody>
+                <tr><td>01/11/2025</td><td>Marcos</td><td>Corte</td><td>R$ 30,00</td></tr>
+                <tr><td>02/11/2025</td><td>Lucas</td><td>Barba</td><td>R$ 20,00</td></tr>
+                <tr><td>05/11/2025</td><td>João</td><td>Combo</td><td>R$ 50,00</td></tr>
+                <tr><td>06/11/2025</td><td>Pedro</td><td>Corte</td><td>R$ 30,00</td></tr>
+                <tr><td>07/11/2025</td><td>Diego</td><td>Combo</td><td>R$ 50,00</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         <div id="sobre" class="screen">
           <h2>Sobre o Sistema</h2>
-          <p>Protótipo criado para atividade acadêmica. Desenvolvedor: Felipe Bicudo de Oliveira.</p>
-          <p>RA: 60300667
-          <p>Versão 1.0 • Contato: felipe.bicudo2006@outlook.com</p>
+          <p>Protótipo criado para atividade acadêmica. Desenvolvedor: João Silva.</p>
+          <p>Versão 1.1 • Contato: joao@example.com</p>
         </div>
 
       </div>
-
     </main>
   </div>
 
   <script>
-    // Navegação simples entre telas
-    const navButtons = document.querySelectorAll('.nav button')
-    const screens = document.querySelectorAll('.screen')
-    const pageTitle = document.getElementById('pageTitle')
+    const navButtons = document.querySelectorAll('.nav button');
+    const screens = document.querySelectorAll('.screen');
+    const pageTitle = document.getElementById('pageTitle');
 
     function showView(id){
-      screens.forEach(s=>s.classList.remove('active'))
-      document.getElementById(id).classList.add('active')
-      // update nav active
-      navButtons.forEach(b=>b.classList.toggle('active', b.dataset.view===id))
-      // update title
-      pageTitle.textContent = ({dashboard:'Dashboard',agendamentos:'Agendamentos',novo:'Novo Agendamento',clientes:'Clientes',servicos:'Serviços',relatorios:'Relatórios',sobre:'Sobre'})[id] || 'Protótipo'
+      screens.forEach(s=>s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      navButtons.forEach(b=>b.classList.toggle('active', b.dataset.view===id));
+      pageTitle.textContent = ({
+        dashboard:'Dashboard',agendamentos:'Agendamentos',novo:'Novo Agendamento',
+        clientes:'Clientes',servicos:'Serviços',relatorios:'Relatórios',
+        financeiro:'Relatório Financeiro',sobre:'Sobre'
+      })[id] || 'Protótipo';
     }
-    navButtons.forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)))
-    document.getElementById('btnNovo').addEventListener('click',()=>showView('novo'))
-    document.getElementById('btnVerAgenda').addEventListener('click',()=>showView('agendamentos'))
+
+    navButtons.forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
+    document.getElementById('btnNovo').addEventListener('click',()=>showView('novo'));
+    document.getElementById('btnVerAgenda').addEventListener('click',()=>showView('agendamentos'));
 
     function saveAgendamento(){
       alert('Agendamento salvo (simulado). Tire o print agora.');
-      showView('agendamentos')
+      showView('agendamentos');
     }
     function addCliente(){alert('Adicionar cliente (simulado)')}
     function addServico(){alert('Novo serviço (simulado)')}
   </script>
 </body>
-
 </html>
